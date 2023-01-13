@@ -1,0 +1,11 @@
+.affiche{
+    background:#FFF; 
+    width: 80%; 
+    position: relative; 
+    top:-15px; 
+    padding-left:20px; 
+    border-radius: 5px
+}
+tr, td, th{
+    border: none;
+}

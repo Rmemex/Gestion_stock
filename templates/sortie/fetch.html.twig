@@ -1,0 +1,18 @@
+{% for sortie in sorties %}
+    <tr class="text-center">
+        <td>{{ sortie.id }}</td>
+        <td>{{ sortie.sortDate ? sortie.sortDate|date('Y-m-d') : '' }}</td>
+        <td>{{ sortie.client }}</td>
+        <td>{{ sortie.produit }}</td>
+        <td>{{ sortie.sortPrix }}</td>
+        <td>{{ sortie.sortQuantite }}</td>
+        <td>
+            <a title="Détails" href="{{ path('sortie_show', {'id': sortie.id}) }}"><i class="fa fa-eye" style="padding: 5px"></i></a>
+            <a title="Facture" href="{{ path('sortie_facture', {'id': sortie.id, 'date': sortie.sortDate ? sortie.sortDate|date('Y-m-d') : '', 'client': sortie.client.id}) }}"><i class="fas fa-file-invoice-dollar" style="padding: 5px"></i></a>
+        </td>
+    </tr>
+{% else %}
+    <tr class="text-center">
+        <td colspan="7">Aucun enregistrement trouvé</td>
+    </tr>
+{% endfor %}

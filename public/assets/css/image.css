@@ -1,0 +1,108 @@
+.fileType{
+    width: 250px;
+    height: 250px;
+    position: relative;
+    border: 1px solid;
+}
+
+/* ajout categorie */
+.img_prev{
+    width: 250px;
+    height: 250px;
+    position: relative;
+    border-radius: 5px;
+    background-size: 100% 100%;
+    overflow: hidden;
+}
+.img_prev .custom-file-input {
+    position: absolute !important;
+    left: 0px;
+    border-radius: 5px;
+    outline: none !important;
+    color: transparent;
+    opacity: 1 !important;
+    box-sizing: border-box !important;
+    padding: 123px 97px;
+    cursor: pointer;
+    z-index: 99999999;
+}
+.img_prev .custom-file-input::-webkit-file-upload-button {
+    visibility: hidden;
+}
+.custom-file-label{
+    opacity: 0;
+}
+.image_default{
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+    object-fit: cover;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.add_img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    font-size: 15px;
+    color: #3C63D2;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+.modif_Img {
+    display:none;
+    border-radius: 5px;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    font-size: 15x;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    color: #3C63D2;
+    font-weight: bold;
+    opacity: 0;
+    transition: all 0.3s ease-in-out;
+}
+
+.img_prev:hover .modif_Img,
+.img_prev:hover .add_img{
+    opacity: 1;
+    background: rgb(255 255 255 / 80%)
+}
+.img_caissier{
+    margin-top: 12px;
+    width: 150px;
+    height: 150px;
+    position: relative;
+    border-radius: 5px;
+    background-size: 100% 100%;
+    overflow: hidden;
+}
+.img_caissier .custom-file-input {
+    position: absolute !important;
+    left: 0px;
+    border-radius: 5px;
+    outline: none !important;
+    color: transparent;
+    opacity: 1 !important;
+    box-sizing: border-box !important;
+    padding: 123px 97px;
+    cursor: pointer;
+}
+.img_caissier .custom-file-input::-webkit-file-upload-button {
+    visibility: hidden;
+}
+
+.img_caissier:hover .modif_Img,
+.img_caissier:hover .add_img{
+    opacity: 1;
+    background: rgb(255 255 255 / 80%)
+}

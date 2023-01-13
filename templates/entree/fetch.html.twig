@@ -1,0 +1,18 @@
+{% for entree in entrees %}
+    <tr class="text-center">
+        <td>{{ entree.id }}</td>
+        <td>{{ entree.entrDate ? entree.entrDate|date('Y-m-d') : '' }}</td>
+        <td>{{ entree.fournisseur }}</td>
+        <td>{{ entree.produit }}</td>
+        <td>{{ entree.entrPrix }}</td>
+        <td>{{ entree.entrQuantite }}</td>
+        <td>
+            <a title="Détails" href="{{ path('entree_show', {'id': entree.id}) }}"><i class="fa fa-eye" style="padding: 5px"></i></a>
+            <a title="Bon de commande" href="{{ path('entree_commande', {'id': entree.id, 'date': entree.entrDate ? entree.entrDate|date('Y-m-d') : '','fournisseur': entree.fournisseur.id}) }}"><i class="fas fa-file-invoice-dollar" style="padding: 5px"></i></a>
+        </td>
+    </tr>
+{% else %}
+    <tr class="text-center">
+        <td colspan="7">Aucun enregistrement trouvé</td>
+    </tr>
+{% endfor %}

@@ -1,0 +1,173 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion de vente | Sortie index{% endblock %}
+
+{% block body %}
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger" id="flash">
+            {{ message }}
+        </div>
+    {% endfor %}
+    <h3 class="text-center">Ajout sortie</h3>
+    <a href="{{ path('sortie_index') }}" class="btn btn-secondary" style="width:45px; height: 35px; color:white; font-size:11px; position : relative; top:-45px"><i class="fa fa-chevron-left" style="padding: 5px"></i></a>
+    <div style="width:90%; position: relative; top: -20px">
+        <div class="row">
+            <div class="col-md-5">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="inputGroupSelect01">Date</label>
+                            </div>
+                            <input type="date" name="date" id="select_date" class="form-control" value="<?php echo date('Y-m-d'); ?>">
+                        </div>
+                    </div>
+            <div class="col-md-5">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputGroupSelect01" >Client</label>
+                    </div>
+                    <select class="item_client custom-select">
+                        <option value="">Sélectionner un client</option>
+                        {% for client in clients %}
+                            <option value="{{client.id}}">{{client.cliNom}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-bordered" id="crud_table" style="background-color:white">
+                <thead>
+                    <tr class="text-center">
+                        {#<th>client</th>#}
+                        <th>Produit</th>
+                        <th>Prix</th>
+                        <th>Quantite</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+             
+                <tbody>
+                    <tr>
+                        <td contenteditable="false" id="item_produit">
+                            <select class="item_produit" style="border: none; width: 100%">
+                                <option value="">Sélectionner un produit</option>
+                                {% for produit in produits %}
+                                <option value="{{produit.id}}">{{produit.proNom}}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                            <td contenteditable="true" class="item_prix"></td>
+                            <td contenteditable="true" class="item_quantite"></td>
+                            <td ></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div align="right">
+                <button type="button" name="add" id="add" class="btn btn-secondary" style="height:25px; font-size:9px">+</button>
+            </div>
+            <div align="center">
+                <button type="button" name="save" id="save" class="btn btn-success"  new-sortie="{{ path('sortie_new') }}" style="width: 20%; height:35px; font-size:12px; position:relative; top:-30px;">Enregistrer</button>
+            </div>
+                    <br />
+            <div id="inserted_item_data"></div>
+            </div>
+
+            <div style="position:relative; top: 20px">
+                    <table class="table" id="example">
+                        <thead>
+                            <tr class="text-center">
+                                <th>Client</th>
+                                <th>Produit</th>
+                                <th>Prix </th>
+                                <th>Quantite</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% include "sortie/_liste_sortie.html.twig" %}
+                        </tboby>
+                    </table>
+                </div>
+            </div>
+               
+{% endblock %}
+{% block javascripts %}
+       {{parent()}}
+        <script>
+            $(document).ready(function(){
+                $('#example').DataTable({
+                    scrollY: '300px',
+                    scrollCollapse: true,
+                    paging:false,
+                    "language": {
+                        "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/French.json"
+                    }
+                });
+
+                var count = 1;
+                $('#add').click(function(){
+                    count = count + 1;
+                    var html_code = "<tr id='row"+count+"'>";
+                    html_code += "<td contenteditable='true' class='item_produit'>"+$('#item_produit').html()+"</td>";
+                    html_code += "<td contenteditable='true' class='item_prix' ></td>";
+                    html_code += "<td contenteditable='true' class='item_quantite'></td>";
+                    html_code += "<td><button type='button' name='remove' data-row='row"+count+"' class='btn btn-danger btn-xs remove' style='height:25px; font-size:9px'>-</button></td>";   
+                    html_code += "</tr>";  
+                    $('#crud_table').append(html_code);
+                });
+                
+                $(document).on('click', '.remove', function(){
+                    var delete_row = $(this).data("row");
+                    $('#' + delete_row).remove();
+                });
+                
+                $('#save').click(function(e){
+                    e.preventDefault();
+                    let urlCreateNewSortie = e.target.getAttribute('new-sortie');
+                    let allData= [];
+                    $('#crud_table tbody tr').each(function(){
+                        let sortie= {
+                            'client': $('.item_client').val(),
+                            'produit':$(this).find('.item_produit').val(),
+                            'prix':$(this).find('.item_prix').text(),
+                            'quantite':$(this).find('.item_quantite').text(),
+                        };
+                        allData.push(sortie);
+                    });
+                    $('#example').dataTable().fnDestroy(); 
+                    $.ajax({
+                        url: urlCreateNewSortie,
+                        method: 'GET',
+                        data: {
+                            allData: allData,
+                        },
+                        success:function(data){
+                            $('.added-row').remove();
+                            $('.item_prix').text('');
+                            $('.item_quantite').text('');
+                            $('#content-list').html(data.tamplateList);
+                        },
+                        error: function (error) {
+                            console.log(error);
+                        },
+                        complete: function(){
+                            $('#example').DataTable({
+                                scrollY: '300px',
+                                scrollCollapse: true,
+                                paging:false,
+                                "language": {
+                                    "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/French.json"
+                                }
+                            });
+                        }
+
+                    });
+                });
+        
+            
+                $(document).on('click', '.item_client', function(){
+                    $('#example').DataTable().search($('.item_client option:selected').text()).draw();
+                });
+            });
+        </script>
+{% endblock %}

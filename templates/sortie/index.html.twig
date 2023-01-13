@@ -1,0 +1,108 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion de vente | Sortie index{% endblock %}
+
+{% block body %}
+    <h3>Etat des sorties</h3>
+    <a class="btn btn-secondary" href="{{ path('sortie_ajout') }}" style="color:white; text-decoration: none; font-size:12px; width:115px; height: 32px; margin-bottom:10px;"><i class="fa fa-plus" style="padding: 5px"></i>Ajouter</a>
+    {# <a class="btn btn-info" id="print" href="{{ path('sortie_liste', {'date': '2022-08-17', 'client': '1'}) }}" style="color:white; text-decoration: none; font-size:12px; width:135px; height: 32px; margin-bottom:10px;"><i class="fa fa-plus" style="padding: 5px"></i>Imprimer liste</a> #}
+    <div class="row js-filter">
+        <form method="GET" action="{{ path('sortie_filter') }}" class="js-form">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="inputGroupSelect01">Date</label>
+                            </div>
+                            <input type="date" name="date" id="select_date" class="form-control" params-date="{{ path('sortie_filter') }}" ?>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="inputGroupSelect01">Client</label>
+                            </div>
+                            <select class="custom-select" param-cli="{{ path('sortie_filter') }}" name="client" id="select_cli"> 
+                                <option value="">Sélectionner un client</option>
+                                {% for clients in client %}
+                                    <option value="{{ clients.id }}">{{ clients.cliNom }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <button id="filter" url-filter="{{ path('sortie_filter') }}" class="btn btn-sm btn-secondary" style="width: 35%; height: 35px; position:relative; top: 2px; left: -10px">Filter</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="table-responsive" style="width:90%">
+                        <table class="table" id="example">
+                            <thead>
+                                <tr class="text-center">
+                                    <th>ID</th>
+                                    <th>Date</th>
+                                    <th>Client</th>
+                                    <th>Produit</th>
+                                    <th>Quantite</th>
+                                    <th>Prix</th>
+                                    <th>Details</th>
+                                </tr>
+                            </thead>
+                            <tbody class="js-table">
+                                {% include "sortie/fetch.html.twig" %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+{% block javascripts %}
+       {{parent()}}
+       <script>
+        $(document).ready(function(){
+            $('#filter').click(function(e){
+                e.preventDefault();
+                const urlFilter = e.target.getAttribute('url-filter');
+                let date = $('#select_date').val();
+                let client = $('#select_cli').val();
+
+                $.ajax({
+                    url: urlFilter,
+                    method: 'POST',
+                    data: {
+                        date: date,
+                        client: client,
+                    },
+                    success: function (response) {
+                        $('.js-table').html(response.table);
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                })
+            });
+            $('#print').click(function(e){
+                const urlPrint = e.target.getAttribute('href');
+                let date = $('#select_date').val();
+                let client = $('#select_cli').val();
+
+                console.log(urlPrint);
+            })
+    })
+    </script>
+        <script>
+            $(function() {
+                
+                $('#example').DataTable({
+                    "language": {
+                        "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/French.json"
+                    }
+                  });
+
+
+                });
+        </script>
+{% endblock %}

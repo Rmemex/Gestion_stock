@@ -1,0 +1,10 @@
+{% for liste in listes %}
+    <tr>
+        <td>{{ liste.id }}</td>
+        <td>{{ liste.entrDate ? liste.entrDate|date('Y-m-d') : '' }}</td>
+        <td>{{ liste.fournisseur }}</td>
+        <td>{{ liste.produit }}</td>
+        <td>{{ liste.entrPrix }}</td>
+        <td>{{ liste.entrQuantite }}</td>
+    </tr>
+{% endfor %}

@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion de vente | Paramètre{% endblock %}
+
+{% block stylesheets %}<link rel="stylesheet" href="{{ asset('assets/css/affiche.css') }}">{% endblock %}
+
+{% block body %}
+    <h3>Paramètre</h3>
+    
+    <div class="affiche" style="top: 10px; padding-top:15px; padding-bottom: 5px">
+        <table class="table">
+            <tbody>
+            {% for parametre in parametres %}
+                <tr>
+                    <p hidden="">{{ parametre.id }}</p>
+                    <p><strong style="color:#707070">Site :</strong> {{ parametre.paramSite }}</p>
+                    <p><strong style="color:#707070">SMTP :</strong> {{ parametre.paramSmtp }}</p>
+                    <p><strong style="color:#707070">Mot de passe :</strong> {{ parametre.paramMdp }}</p>
+                    <p><strong style="color:#707070">Code :</strong> {{ parametre.paramCode }}</p>
+                    <p><strong style="color:#707070">Actif :</strong> {{ parametre.paramActif }}</p>
+                    <a class="btn btn-secondary" href="{{ path('parametre_edit', {'id': parametre.id}) }}" style="color:white; text-decoration: none; font-size: 12px">Mettre à jour les paramètres</a>
+                </tr>
+            {% else %}
+                <tr class="text-center">
+                    <td colspan="7">Aucun enregistrement trouvé</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
